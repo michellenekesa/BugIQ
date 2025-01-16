@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Model Performance{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3>Model Performance Analysis</h3>
+            </div>
+            <div class="card-body">
+                {% if analysis %}
+                    <h4>Overall Statistics</h4>
+                    <p>Total Misclassifications: {{ analysis.total_misclassified }}</p>
+                    <p>Error Rate: {{ "%.2f"|format(analysis.error_rate) }}%</p>
+
+                    <h4>Confusion Matrix</h4>
+                    {% if confusion_matrix_plot %}
+                        <img src="data:image/png;base64,{{ confusion_matrix_plot }}" 
+                             class="img-fluid" alt="Confusion Matrix">
+                    {% endif %}
+
+                    <h4>Misclassified Examples</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Summary</th>
+                                <th>Component</th>
+                                <th>Actual Severity</th>
+                                <th>Predicted Severity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for example in analysis.misclassified_examples %}
+                            <tr>
+                                <td>{{ example.Summary }}</td>
+                                <td>{{ example.Component }}</td>
+                                <td>{{ example.Actual_Severity }}</td>
+                                <td>{{ example.Predicted_Severity }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No performance data available yet. Add actual severity values to predictions to see analysis.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

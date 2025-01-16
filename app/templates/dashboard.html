@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3>Predict Bug Severity</h3>
+            </div>
+            <div class="card-body">
+                <div id="alert-container"></div>
+                <form id="prediction-form">
+                    <div class="form-group">
+                        <label for="summary">Bug Summary</label>
+                        <textarea class="form-control" id="summary" name="summary" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="component">Component</label>
+                        <input type="text" class="form-control" id="component" name="component" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Predict Severity</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3>Recent Predictions</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Summary</th>
+                                <th>Component</th>
+                                <th>Predicted Severity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for prediction in predictions %}
+                            <tr>
+                                <td>{{ prediction.summary }}</td>
+                                <td>{{ prediction.component }}</td>
+                                <td>{{ prediction.predicted_severity }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('prediction-form');
+    const alertContainer = document.getElementById('alert-container');
+
+    function showAlert(message, type = 'danger') {
+        alertContainer.innerHTML = `
+            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+    }
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        try {
+            const response = await fetch('{{ url_for("main.predict") }}', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                showAlert(`Prediction successful! Severity: ${data.severity}`, 'success');
+                setTimeout(() => window.location.reload(), 1500);
+            } else {
+                showAlert(data.error || 'An error occurred');
+            }
+        } catch (error) {
+            showAlert('Server error: ' + error.message);
+        }
+    });
+});
+</script>
+{% endblock %}
