@@ -29,7 +29,7 @@ This project leverages machine learning techniques to predict the severity of so
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/bug-severity-prediction.git
+  https://github.com/michellenekesa/BugIQ.git
    cd bug-severity-prediction
    ```
 2. Create and activate a virtual environment:
