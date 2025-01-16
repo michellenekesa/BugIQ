@@ -1,4 +1,3 @@
-# BugIQ
 # Automated Software Bug Severity Prediction
 
 This project leverages machine learning techniques to predict the severity of software bugs, aiming to enhance quality assurance in software development. The solution utilizes Random Forests, Latent Dirichlet Allocation (LDA), and VADER sentiment analysis, with a Flask-based web interface for real-time predictions.
@@ -29,8 +28,8 @@ This project leverages machine learning techniques to predict the severity of so
 ## Installation
 1. Clone the repository:
    ```bash
-  https://github.com/michellenekesa/BugIQ.git
-   cd bug-severity-prediction
+   git clone https://github.com/michellenekesa/BugIQ.git
+   cd BugIQ
    ```
 2. Create and activate a virtual environment:
    ```bash
@@ -74,5 +73,5 @@ This project leverages machine learning techniques to predict the severity of so
 
 ---
 
-
-
+### License
+MIT License. See `LICENSE` for details.
